@@ -1,5 +1,5 @@
-import { signalStore, withComputed, withState } from '@ngrx/signals';
-import { User } from '../models/user.model';
+import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { User } from '../../models/user.model';
 import { computed } from '@angular/core';
 
 type AuthState = {

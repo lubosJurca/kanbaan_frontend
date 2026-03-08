@@ -11,7 +11,8 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
   const password = group.get('password')?.value;
   const confirmPassword = group.get('confirmPassword')?.value;
 
-  // null znamená "validní", objekt znamená "chyba"
+  //Angular očekává, že validátor vrátí null, pokud je vše v pořádku, nebo objekt s chybou, pokud není.
+  // V tomto případě vrací null, pokud se hesla shodují, a objekt s chybou, pokud se neshodují.
   return password === confirmPassword ? null : { passwordsMismatch: true };
 }
 
@@ -35,5 +36,12 @@ export class RegisterPage {
 
   onSubmit() {
     console.log(this.registerForm.value);
+
+    //TODO: Odeslat data na backend a zpracovat odpověď
+  }
+
+  hasError(fieldName: string, errorType: string): boolean {
+    const control = this.registerForm.get(fieldName);
+    return !!(control?.touched && control?.errors?.[errorType]);
   }
 }
