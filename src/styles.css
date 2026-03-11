@@ -1,3 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap');
 
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #635FC7;
+  --color-primary-light: #A8A4FF;
+  --color-dark-bg: #000112;
+  --color-dark-surface: #20212C;
+  --color-dark-card: #2B2C37;
+  --color-dark-line: #3E3F4E;
+  --color-light-bg: #F4F7FD;
+  --color-light-line: #E4EBFA;
+  --color-medium: #828FA3;
+  --color-destructive: #EA5555;
+  --color-destructive-light: #FF9898;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+}

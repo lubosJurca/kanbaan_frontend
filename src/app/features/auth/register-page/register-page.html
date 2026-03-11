@@ -1,53 +1,108 @@
-<form
-  [formGroup]="registerForm"
-  (ngSubmit)="onSubmit()"
-  class="flex flex-col w-full h-screen justify-center items-center"
->
-  @if (hasError('username', 'required')) {
-    <div class="text-red-500">Username is required.</div>
-  } @else if (hasError('username', 'minLength')) {
-    <div class="text-red-500">Username must be at least 3 characters long.</div>
-  } @else if (hasError('username', 'maxLength')) {
-    <div class="text-red-500">Username must be at most 20 characters long.</div>
-  }
-  <div class="border m-1 p-2">
-    <label for="username">Username: </label>
-    <input class="bg-gray-300" id="username" type="text" formControlName="username" />
-  </div>
+<div class="min-h-screen flex items-center justify-center bg-light-bg dark:bg-dark-bg">
+  <div class="w-full max-w-md bg-white dark:bg-dark-card rounded-lg shadow-md p-8 mx-4">
 
-  @if (hasError('email', 'required')) {
-    <div class="text-red-500">Email is required.</div>
-  } @else if (hasError('email', 'email')) {
-    <div class="text-red-500">Please enter a valid email address.</div>
-  }
-  <div class="border m-1 p-2">
-    <label for="email">Email: </label>
-    <input class="bg-gray-300" id="email" type="email" formControlName="email" />
-  </div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center tracking-tight">
+      kanbaan
+    </h1>
 
-  @if (hasError('password', 'required')) {
-    <div class="text-red-500">Password is required.</div>
-  } @else if (hasError('password', 'minlength')) {
-    <div class="text-red-500">Password must be at least 6 characters long.</div>
-  }
-  <div class="border m-1 p-2">
-    <label for="password">Password: </label>
-    <input class="bg-gray-300" id="password" type="password" formControlName="password" />
-  </div>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
 
-  <div class="border m-1 p-2">
-    <label for="confirmPassword">Confirm Password: </label>
-    <input
-      class="bg-gray-300"
-      id="confirmPassword"
-      type="password"
-      formControlName="confirmPassword"
-    />
+      <!-- Username -->
+      <div class="flex flex-col gap-2">
+        <label for="username" class="text-xs font-bold text-medium uppercase tracking-widest">
+          Username
+        </label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="e.g. alex123"
+          class="w-full border rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card placeholder:text-medium focus:outline-none transition-colors"
+          [ngClass]="inputClass('username')"
+        />
+        @if (hasError('username', 'required')) {
+          <p class="text-destructive text-xs font-bold">Can't be empty</p>
+        } @else if (hasError('username', 'minlength')) {
+          <p class="text-destructive text-xs font-bold">Min. 3 characters</p>
+        } @else if (hasError('username', 'maxlength')) {
+          <p class="text-destructive text-xs font-bold">Max. 20 characters</p>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="flex flex-col gap-2">
+        <label for="email" class="text-xs font-bold text-medium uppercase tracking-widest">
+          Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="e.g. alex@gmail.com"
+          class="w-full border rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card placeholder:text-medium focus:outline-none transition-colors"
+          [ngClass]="inputClass('email')"
+        />
+        @if (hasError('email', 'required')) {
+          <p class="text-destructive text-xs font-bold">Can't be empty</p>
+        } @else if (hasError('email', 'email')) {
+          <p class="text-destructive text-xs font-bold">Invalid email address</p>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="flex flex-col gap-2">
+        <label for="password" class="text-xs font-bold text-medium uppercase tracking-widest">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          class="w-full border rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card placeholder:text-medium focus:outline-none transition-colors"
+          [ngClass]="inputClass('password')"
+        />
+        @if (hasError('password', 'required')) {
+          <p class="text-destructive text-xs font-bold">Can't be empty</p>
+        } @else if (hasError('password', 'minlength')) {
+          <p class="text-destructive text-xs font-bold">Min. 6 characters</p>
+        }
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="flex flex-col gap-2">
+        <label for="confirmPassword" class="text-xs font-bold text-medium uppercase tracking-widest">
+          Confirm Password
+        </label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="••••••••"
+          class="w-full border rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card placeholder:text-medium focus:outline-none transition-colors"
+          [ngClass]="confirmPasswordClass()"
+        />
+        @if (registerForm.errors?.['passwordsMismatch'] && registerForm.get('confirmPassword')?.touched) {
+          <p class="text-destructive text-xs font-bold">Passwords do not match</p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="registerForm.status === 'INVALID' || authStore.isLoading()"
+        class="w-full bg-primary hover:bg-primary-light text-white rounded-full px-6 py-3 font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ authStore.isLoading() ? 'Registering...' : 'Create Account' }}
+      </button>
+
+    </form>
+
+    <p class="text-center text-medium text-sm mt-6">
+      Already have an account?
+      <a routerLink="/login" class="text-primary font-bold hover:text-primary-light transition-colors">
+        Log in
+      </a>
+    </p>
+
   </div>
-  <button
-    [disabled]="registerForm.status === 'INVALID'"
-    class="bg-green-400 p-3 rounded-2xl active:scale-75 cursor-pointer disabled:bg-gray-800 disabled:text-gray-500"
-  >
-    Register
-  </button>
-</form>
+</div>

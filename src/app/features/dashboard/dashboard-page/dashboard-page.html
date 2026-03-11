@@ -1,5 +1,6 @@
 @if (authStore.isLoggedIn()) {
   <p>User is logged in with username {{ authStore.user()?.username }}</p>
+  <button (click)="logoutUser()">Logout</button>
 } @else {
   <p>Not logged in</p>
 }
