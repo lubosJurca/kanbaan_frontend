@@ -1,0 +1,99 @@
+<p class="text-xs font-bold text-medium uppercase tracking-widest px-6 mb-4">
+  All Boards ({{ boardStore.boardCount() }})
+</p>
+
+<ul>
+  @for (board of boardStore.entities(); track board.id) {
+    <li
+      (click)="boardStore.selectBoard(board.id)"
+      class="flex items-center gap-3 pl-6 pr-4 py-3 mr-6 rounded-r-full cursor-pointer text-sm font-bold transition-colors"
+      [ngClass]="
+        board.id === boardStore.selectedBoardId()
+          ? 'bg-primary text-white'
+          : 'text-medium hover:bg-light-bg dark:hover:bg-dark-bg hover:text-primary'
+      "
+    >
+      <img src="/board.png" alt="" class="h-4 w-auto" />
+      {{ board.title }}
+    </li>
+  } @empty {
+    <li class="px-6 py-3 text-sm text-medium">No boards yet.</li>
+  }
+</ul>
+
+<button
+  (click)="showDialog()"
+  class="flex items-center gap-3 pl-6 py-3 text-primary font-bold text-sm hover:text-primary-light transition-colors mt-2 w-full"
+>
+  <img src="/board.png" alt="" class="h-4 w-auto" />
+  + Create New Board
+</button>
+
+<p-dialog
+  header="Create Board"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem' }"
+>
+  <form [formGroup]="createBoardForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5 pt-2">
+
+    <div class="flex flex-col gap-2">
+      <label for="title" class="text-xs font-bold text-medium uppercase tracking-widest">Name</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="e.g. Platform Launch"
+        autocomplete="off"
+        class="w-full border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card placeholder:text-medium focus:outline-none focus:border-primary transition-colors"
+      />
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <p class="text-xs font-bold text-medium uppercase tracking-widest">Columns</p>
+      <div formArrayName="columns" class="flex flex-col gap-2">
+        @for (column of columns.controls; track $index) {
+          <div [formGroupName]="$index" class="flex items-center gap-2">
+            <input
+              type="text"
+              formControlName="title"
+              class="flex-1 border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card focus:outline-none focus:border-primary transition-colors"
+            />
+            <button
+              type="button"
+              (click)="removeColumn($index)"
+              class="text-medium hover:text-destructive transition-colors text-lg font-bold px-1 leading-none"
+            >
+              ✕
+            </button>
+          </div>
+        }
+      </div>
+      <button
+        type="button"
+        (click)="addColumn()"
+        class="w-full bg-light-bg dark:bg-dark-bg text-primary font-bold text-sm rounded-full py-2 hover:opacity-80 transition-opacity"
+      >
+        + Add New Column
+      </button>
+    </div>
+
+    <div class="flex gap-3 pt-1">
+      <button
+        type="button"
+        (click)="visible = false"
+        class="flex-1 bg-light-bg dark:bg-dark-bg text-primary font-bold text-sm rounded-full py-3 hover:opacity-80 transition-opacity"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="submitting()"
+        class="flex-1 bg-primary hover:bg-primary-light text-white font-bold text-sm rounded-full py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Create Board
+      </button>
+    </div>
+
+  </form>
+</p-dialog>

@@ -1,0 +1,17 @@
+<ul cdkDropList [cdkDropListData]="columnId()" (cdkDropListDropped)="drop($event)" class="h-full">
+  @for (task of columnTasks(); track task.id) {
+    <li
+      cdkDrag
+      class="bg-white dark:bg-dark-card rounded-lg px-4 py-6 shadow-[0_4px_6px_rgba(54,78,126,0.1)] cursor-pointer group hover:shadow-md transition-shadow mb-5 last:mb-0"
+    >
+      <h3
+        class="font-bold text-sm text-gray-900 dark:text-white group-hover:text-primary transition-colors"
+      >
+        {{ task.title }}
+      </h3>
+      @if (task.description) {
+        <p class="text-xs text-medium mt-2 line-clamp-2">{{ task.description }}</p>
+      }
+    </li>
+  }
+</ul>

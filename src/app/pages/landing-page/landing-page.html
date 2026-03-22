@@ -1,3 +1,56 @@
-<a routerLink="/login">Login</a>
-<a routerLink="/register">Register</a>
+<div class="min-h-screen flex flex-col bg-light-bg dark:bg-dark-bg">
 
+  <!-- Navbar -->
+  <nav class="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto w-full">
+    <div class="flex items-center gap-2">
+      <img src="/logo.png" alt="kanbaan logo" class="h-6 w-auto" />
+      <span class="font-bold text-gray-900 dark:text-white text-lg tracking-tight">kanbaan</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <a
+        routerLink="/login"
+        class="text-sm font-bold text-medium hover:text-gray-900 dark:hover:text-white transition-colors px-4 py-2"
+      >
+        Log In
+      </a>
+      <a
+        routerLink="/register"
+        class="text-sm font-bold text-white bg-primary hover:bg-primary-light rounded-full px-5 py-2 transition-colors"
+      >
+        Sign Up
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <main class="flex flex-1 flex-col items-center justify-center text-center px-6 py-20 max-w-2xl mx-auto w-full">
+    <div class="flex items-center gap-2 mb-6 bg-white dark:bg-dark-card border border-light-line dark:border-dark-line rounded-full px-4 py-1.5">
+      <img src="/board.png" alt="" class="h-4 w-auto" />
+      <span class="text-xs font-bold text-medium uppercase tracking-widest">Kanban Board</span>
+    </div>
+
+    <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-5">
+      Organize your work,<br />ship faster.
+    </h1>
+
+    <p class="text-base text-medium leading-relaxed mb-10 max-w-md">
+      kanbaan helps teams manage tasks visually — drag, drop, and track progress across boards and columns.
+    </p>
+
+    <div class="flex items-center gap-4">
+      <a
+        routerLink="/register"
+        class="text-sm font-bold text-white bg-primary hover:bg-primary-light rounded-full px-7 py-3 transition-colors"
+      >
+        Get Started Free
+      </a>
+      <a
+        routerLink="/login"
+        class="text-sm font-bold text-medium hover:text-gray-900 dark:hover:text-white transition-colors"
+      >
+        I have an account →
+      </a>
+    </div>
+  </main>
+
+</div>

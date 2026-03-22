@@ -2,18 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { environment } from '../../environments/environment';
-import { User } from '../../models/user.model';
-
-type RegisterUserPayload = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-type LoginUserPayload = {
-  email: string;
-  password: string;
-};
+import { LoginUserPayload, RegisterUserPayload, User } from '../../models/models';
 
 @Injectable({
   providedIn: 'root',

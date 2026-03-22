@@ -1,28 +1,10 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { User } from '../../models/user.model';
+import { AuthState, LoginUserPayload, RegisterUserPayload, User } from '../../models/models';
 import { computed, inject } from '@angular/core';
 import { AuthService } from './auth.service';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
-
-type AuthState = {
-  user: User | null;
-  isLoading: boolean;
-  error: string | null;
-  isInitialized: boolean;
-};
-
-type RegisterUserPayload = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-type LoginUserPayload = {
-  email: string;
-  password: string;
-};
 
 const initialState: AuthState = {
   user: null,
@@ -44,7 +26,11 @@ export const AuthStore = signalStore(
         try {
           const user = await firstValueFrom(authService.registerUser(payload));
           patchState(store, { user });
-           messageService.add({severity: 'success', summary: 'Registration successful!', detail: `Welcome, ${user.username}`})
+          messageService.add({
+            severity: 'success',
+            summary: 'Registration successful!',
+            detail: `Welcome, ${user.username}`,
+          });
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse
@@ -69,9 +55,13 @@ export const AuthStore = signalStore(
         try {
           const user = await firstValueFrom(authService.loginUser(payload));
           patchState(store, { user });
-          messageService.add({severity: 'success', summary: 'Login successful!', detail: `Welcome, ${user.username}`})
+          messageService.add({
+            severity: 'success',
+            summary: 'Login successful!',
+            detail: `Welcome, ${user.username}`,
+          });
         } catch (error) {
-            const errorMessage =
+          const errorMessage =
             error instanceof HttpErrorResponse
               ? (error.error?.message ?? 'Something went wrong')
               : 'Something went wrong';

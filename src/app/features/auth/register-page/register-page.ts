@@ -7,7 +7,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { AuthStore } from '../auth.store';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
@@ -27,6 +27,13 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 export class RegisterPage {
   private formBuilder = inject(FormBuilder);
   public authStore = inject(AuthStore);
+  private router = inject(Router);
+  
+  private redirectEffect = effect(() => {
+    if (this.authStore.user()) {
+      this.router.navigate(['/dashboard']);
+    }
+  });
 
   registerForm = this.formBuilder.group(
     {
@@ -40,13 +47,12 @@ export class RegisterPage {
 
   async onSubmit() {
     if (this.registerForm.valid) {
-        const payload = {
-          username: this.registerForm.value.username!,
-          email: this.registerForm.value.email!,
-          password: this.registerForm.value.password!,
-        };
-        await this.authStore.registerUser(payload);
-      
+      const payload = {
+        username: this.registerForm.value.username!,
+        email: this.registerForm.value.email!,
+        password: this.registerForm.value.password!,
+      };
+      await this.authStore.registerUser(payload);
     }
   }
 

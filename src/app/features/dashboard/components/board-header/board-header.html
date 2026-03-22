@@ -1,0 +1,59 @@
+<section
+  class="flex items-center justify-between px-6 h-16 bg-white dark:bg-dark-card border-b border-light-line dark:border-dark-line"
+>
+  <h2 class="text-xl font-bold text-gray-900 dark:text-white truncate">
+    {{ boardStore.selectedBoard()?.title }}
+  </h2>
+
+  <div class="flex gap-3">
+    @if (boardStore.selectedBoardId()) {
+      <app-add-task />
+    }
+
+    <div class="flex items-center gap-3">
+      <p-menu #menu [model]="items" [popup]="true" />
+      <button
+        [disabled]="!boardStore.selectedBoardId()"
+        (click)="menu.toggle($event)"
+        class="p-2 rounded-full hover:bg-light-bg dark:hover:bg-dark-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <img src="/three-dots-menu.png" alt="options" class="h-5 w-auto" />
+      </button>
+    </div>
+  </div>
+</section>
+
+<p-confirmdialog />
+
+<p-dialog header="Update Board" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <form [formGroup]="updateBoardForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5 pt-2">
+    <div class="flex flex-col gap-2">
+      <label for="title" class="text-xs font-bold text-medium uppercase tracking-widest"
+        >Name</label
+      >
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        autocomplete="off"
+        class="w-full border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card placeholder:text-medium focus:outline-none focus:border-primary transition-colors"
+      />
+    </div>
+
+    <div class="flex gap-3">
+      <button
+        type="button"
+        (click)="visible = false"
+        class="flex-1 bg-light-bg dark:bg-dark-bg text-primary font-bold text-sm rounded-full py-3 hover:opacity-80 transition-opacity"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="flex-1 bg-primary hover:bg-primary-light text-white font-bold text-sm rounded-full py-3 transition-colors"
+      >
+        Save Changes
+      </button>
+    </div>
+  </form>
+</p-dialog>

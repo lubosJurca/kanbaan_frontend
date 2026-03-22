@@ -1,6 +1,18 @@
-@if (authStore.isLoggedIn()) {
-  <p>User is logged in with username {{ authStore.user()?.username }}</p>
-  <button (click)="logoutUser()">Logout</button>
-} @else {
-  <p>Not logged in</p>
-}
+<div class="flex h-screen overflow-hidden bg-light-bg dark:bg-dark-bg">
+  <app-sidebar [(isVisible)]="showSidebar" />
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <app-board-header />
+    <div class="flex-1 overflow-x-auto overflow-y-hidden">
+      <app-column-component />
+    </div>
+  </div>
+
+  @if (!showSidebar()) {
+    <button
+      (click)="showSidebar.set(true)"
+      class="fixed bottom-8 left-0 bg-primary hover:bg-primary-light text-white rounded-r-full px-6 py-4 transition-colors z-50"
+    >
+      <img src="/show-sidebar.png" alt="Show Sidebar" class="h-4 w-auto" />
+    </button>
+  }
+</div>

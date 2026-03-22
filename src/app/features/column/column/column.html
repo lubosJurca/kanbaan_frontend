@@ -1,0 +1,76 @@
+<div class="flex gap-6 p-6 h-full">
+  <ul
+    cdkDropListGroup
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="drop($event)"
+    class="flex gap-6 h-full"
+  >
+    @for (column of columnStore.entities(); track column.id; let i = $index) {
+      <div cdkDrag class="flex flex-col w-70 shrink-0 h-full">
+        <!-- Column header -->
+        <div class="flex items-center gap-3 mb-5">
+          <span
+            cdkDragHandle
+            class="w-3.75 h-3.75 rounded-full shrink-0"
+            [style.background-color]="columnColors[i % columnColors.length]"
+          ></span>
+          <h3
+            cdkDragHandle
+            class="text-xs font-bold tracking-[2.4px] uppercase text-medium flex-1 truncate cursor-pointer"
+          >
+            {{ column.title }}
+          </h3>
+          <app-column-actions [columnId]="column.id" />
+        </div>
+
+        <!-- Tasks area — flex-1 so it fills remaining column height -->
+        <app-task [columnId]="column.id" class="flex-1" />
+      </div>
+    }
+  </ul>
+  <!-- Add new column card -->
+  @if (columnStore.currentBoardId()) {
+    <button
+      (click)="showDialog()"
+      class="flex items-center justify-center w-70 shrink-0 mt-12 self-stretch min-h-50 rounded-xl bg-linear-to-b from-[#E9EFFA] to-[#E9EFFA]/50 dark:from-dark-card/40 dark:to-dark-card/20 text-medium font-bold text-xl hover:text-primary transition-colors cursor-pointer"
+    >
+      + New Column
+    </button>
+  }
+</div>
+
+<!-- Dialog: Create column -->
+<p-dialog header="Add New Column" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <form [formGroup]="createColumnForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5 pt-2">
+    <div class="flex flex-col gap-2">
+      <label for="title" class="text-xs font-bold text-medium uppercase tracking-widest"
+        >Name</label
+      >
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        autocomplete="off"
+        class="w-full border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card placeholder:text-medium focus:outline-none focus:border-primary transition-colors"
+      />
+    </div>
+
+    <div class="flex gap-3">
+      <button
+        type="button"
+        (click)="visible = false"
+        class="flex-1 bg-light-bg dark:bg-dark-bg text-primary font-bold text-sm rounded-full py-3 hover:opacity-80 transition-opacity"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="createColumnForm.invalid || columnStore.isLoading()"
+        class="flex-1 bg-primary hover:bg-primary-light text-white font-bold text-sm rounded-full py-3 transition-colors disabled:opacity-50"
+      >
+        Create Column
+      </button>
+    </div>
+  </form>
+</p-dialog>

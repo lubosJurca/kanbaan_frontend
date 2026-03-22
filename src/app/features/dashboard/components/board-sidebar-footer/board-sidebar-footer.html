@@ -1,0 +1,24 @@
+<!-- Dark / Light mode toggle -->
+<div class="flex items-center justify-center gap-3 px-6 py-4">
+  <img src="/light-mode.png" alt="light mode" class="h-4 w-auto" />
+  <p-toggleswitch [(ngModel)]="checked" />
+  <img src="/dark-mode.png" alt="dark mode" class="h-4 w-auto" />
+</div>
+
+<!-- Logout -->
+<button
+  (click)="logoutUser()"
+  class="flex items-center gap-3 w-full px-6 py-3 text-sm font-bold text-medium hover:text-destructive transition-colors"
+>
+  Logout
+</button>
+
+<!-- Hide Sidebar -->
+<button
+  (click)="isVisible.set(false)"
+  class="flex items-center gap-3 w-full px-6 py-4 text-sm font-bold text-medium hover:text-primary transition-colors"
+>
+  <img src="/hide-sidebar.png" alt="" class="h-4 w-auto" />
+  Hide Sidebar
+</button>
+

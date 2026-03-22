@@ -1,21 +1,19 @@
-import { Component, inject } from '@angular/core';
-import { AuthStore } from '../../auth/auth.store';
-import { Router } from '@angular/router';
+import { Component, signal } from '@angular/core';
+
+import { Sidebar } from '../components/sidebar/sidebar';
+import { BoardHeader } from '../components/board-header/board-header';
+import { BoardStore } from '../../board/board.store';
+import { ColumnStore } from '../../column/column.store';
+import { ColumnComponent } from "../../column/column/column";
+import { TaskStore } from '../../task/task.store';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [],
+  imports: [Sidebar, BoardHeader, ColumnComponent],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css',
+  providers: [BoardStore, ColumnStore,TaskStore],
 })
 export class DashboardPage {
-  readonly authStore = inject(AuthStore);
-  private router = inject(Router);
-
-  async logoutUser() {
-    await this.authStore.logoutUser();
-    if (!this.authStore.user()) {
-      this.router.navigate(['/login']);
-    }
-  }
+  showSidebar = signal<boolean>(true);
 }

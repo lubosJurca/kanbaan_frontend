@@ -1,0 +1,21 @@
+<aside
+  class="flex flex-col h-full shrink-0 bg-white dark:bg-dark-card border-r border-light-line dark:border-dark-line overflow-hidden transition-[width] duration-300 ease-in-out"
+  [class.w-72]="isVisible()"
+  [class.w-0]="!isVisible()"
+>
+  <!-- Logo -->
+  <div class="flex items-center gap-3 px-6 h-16 shrink-0 border-b border-light-line dark:border-dark-line">
+    <img src="/logo.png" alt="kanbaan logo" class="h-6 w-auto" />
+    <span class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">kanbaan</span>
+  </div>
+
+  <!-- Board list -->
+  <div class="flex-1 overflow-y-auto py-5">
+    <app-board />
+  </div>
+
+  <!-- Footer -->
+  <div class="shrink-0 border-t border-light-line dark:border-dark-line">
+    <app-board-footer [(isVisible)]="isVisible" />
+  </div>
+</aside>
