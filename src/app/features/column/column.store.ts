@@ -56,14 +56,16 @@ export const ColumnStore = signalStore(
         }
       },
 
-      async createColumn(title: string) {
-        const boardId = store.currentBoardId();
-        if (!boardId) return;
+      async createColumn(boardId: number,title: string) {
         patchState(store, { isLoading: true });
         try {
           const createdColumn = await firstValueFrom(columnService.createColumn(boardId, title));
           patchState(store, addEntity(createdColumn));
-
+ messageService.add({
+            severity: 'success',
+            summary: 'Success!',
+            detail: `Column with title ${createdColumn.title} was created!`,
+          });
           return createdColumn
         } catch (error) {
           const errorMessage =

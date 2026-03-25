@@ -31,14 +31,15 @@ export class BoardComponent implements OnInit {
       this.submitting.set(true);
       try {
         const board = await this.boardStore.createBoard(this.createBoardForm.value.title!);
-
         if (!board) return;
 
         await Promise.all(
           this.createBoardForm.value
             .columns!.filter((col) => col.title?.trim())
-            .map((col) => this.columnStore.createColumn(col.title!)),
+            .map((col) => this.columnStore.createColumn(board.id,col.title!)),
         );
+
+        this.boardStore.selectBoard(board.id)
 
         this.createBoardForm.get('title')!.reset();
         this.columns.clear();

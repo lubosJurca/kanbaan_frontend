@@ -24,7 +24,7 @@ export class ColumnComponent {
 
   async onSubmit() {
     if (this.createColumnForm.valid && this.columnStore.currentBoardId()) {
-      await this.columnStore.createColumn(this.createColumnForm.value.title!);
+      await this.columnStore.createColumn(this.columnStore.currentBoardId()!,this.createColumnForm.value.title!);
       this.visible = false;
       this.createColumnForm.get('title')!.reset();
     }
