@@ -96,6 +96,11 @@ export const TaskStore = signalStore(
         try {
           const updatedTask = await firstValueFrom(taskService.updateTask(taskId, payload));
           patchState(store, updateEntity({ id: taskId, changes: updatedTask }));
+           messageService.add({
+            severity: 'success',
+            summary: 'Success!',
+            detail: `Task ${updatedTask.title} was updated!`,
+          });
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse
@@ -159,6 +164,12 @@ export const TaskStore = signalStore(
         try {
           const deletedTask = await firstValueFrom(taskService.deleteTask(taskId));
           patchState(store, removeEntity(deletedTask.id));
+
+           messageService.add({
+            severity: 'success',
+            summary: 'Success!',
+            detail: `Task ${deletedTask.title} was deleted!`,
+          });
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse

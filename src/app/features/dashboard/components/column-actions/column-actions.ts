@@ -10,7 +10,14 @@ import { MenuModule } from 'primeng/menu';
 
 @Component({
   selector: 'app-column-actions',
-  imports: [ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule,ConfirmDialogModule, MenuModule],
+  imports: [
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    ReactiveFormsModule,
+    ConfirmDialogModule,
+    MenuModule,
+  ],
   templateUrl: './column-actions.html',
   styleUrl: './column-actions.css',
   providers: [ConfirmationService],
@@ -21,11 +28,11 @@ export class ColumnActions implements OnInit {
   private confirmationService = inject(ConfirmationService);
   items: MenuItem[] | undefined;
   visible: boolean = false;
-  columnId = input.required<number>(); 
+  columnId = input.required<number>();
 
   updateColumnTitleForm = this.formBuilder.group({
-     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]]
-  })
+    title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+  });
 
   ngOnInit() {
     this.items = [
@@ -44,8 +51,8 @@ export class ColumnActions implements OnInit {
     ];
   }
 
-  async onSubmit(){
-    if(this.updateColumnTitleForm.valid){
+  async onSubmit() {
+    if (this.updateColumnTitleForm.valid) {
       await this.columnStore.updateColumn(this.columnId(), this.updateColumnTitleForm.value.title!);
       this.visible = false;
     }

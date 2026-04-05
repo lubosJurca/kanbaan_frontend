@@ -55,6 +55,6 @@ export type TaskPayload = {
 }
 export type UpdateTaskPayload = {
   title: string,
-  description: string,
+  description?: string,
   columnId?: number
 }

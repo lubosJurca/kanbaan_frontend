@@ -1,0 +1,89 @@
+<div class="flex items-center gap-3">
+  <p-menu #menu [model]="items" [popup]="true" appendTo="body" />
+  <button
+    [disabled]="!taskStore.selectedTask()"
+    (click)="menu.toggle($event);"
+    class="p-2 rounded-full hover:bg-light-bg dark:hover:bg-dark-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+  >
+    <img src="/three-dots-menu.png" alt="options" class="h-5 w-auto" />
+  </button>
+</div>
+
+<p-confirmdialog />
+
+<p-dialog header="Update Column" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" appendTo="body" >
+    <form [formGroup]="updateTaskForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5 pt-2">
+
+    <!-- Title -->
+    <div class="flex flex-col gap-2">
+      <label for="title" class="text-xs font-bold text-medium uppercase tracking-widest">Title</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        autocomplete="off"
+        placeholder="e.g. Take coffee break"
+        class="w-full border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm
+               text-gray-900 dark:text-white bg-white dark:bg-dark-card
+               placeholder:text-medium focus:outline-none focus:border-primary transition-colors"
+      />
+    </div>
+
+    <!-- Description -->
+    <div class="flex flex-col gap-2">
+      <label for="description" class="text-xs font-bold text-medium uppercase tracking-widest">Description</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="4"
+        placeholder="e.g. It's always good to take a break…"
+        class="w-full border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm
+               text-gray-900 dark:text-white bg-white dark:bg-dark-card resize-none
+               placeholder:text-medium focus:outline-none focus:border-primary transition-colors"
+      ></textarea>
+    </div>
+
+    <!-- Status (Column) -->
+    <div class="flex flex-col gap-2">
+      <label for="columnId" class="text-xs font-bold text-medium uppercase tracking-widest">Status</label>
+      <div class="relative">
+        <select
+          id="columnId"
+          formControlName="columnId"
+          class="w-full appearance-none border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm
+                 text-gray-900 dark:text-white bg-white dark:bg-dark-card
+                 focus:outline-none focus:border-primary transition-colors cursor-pointer"
+        >
+          <option value="" disabled>Select column</option>
+          @for (column of columnStore.entities(); track column.id) {
+            <option [value]="column.id">{{ column.title }}</option>
+          }
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+          <svg class="w-4 h-4 text-medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-3">
+      <button
+        type="button"
+        (click)="visible = false"
+        class="flex-1 bg-light-bg dark:bg-dark-bg text-primary font-bold text-sm rounded-full py-3 hover:opacity-80 transition-opacity"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="updateTaskForm.invalid || taskStore.isLoading()"
+        class="flex-1 bg-primary hover:bg-primary-light text-white font-bold text-sm rounded-full py-3 transition-colors disabled:opacity-50"
+      >
+        Update Task
+      </button>
+    </div>
+
+  </form>
+</p-dialog>

@@ -3,6 +3,7 @@
     <li
       cdkDrag
       class="bg-white dark:bg-dark-card rounded-lg px-4 py-6 shadow-[0_4px_6px_rgba(54,78,126,0.1)] cursor-pointer group hover:shadow-md transition-shadow mb-5 last:mb-0"
+      (click)="showDialog(task.id)"
     >
       <h3
         class="font-bold text-sm text-gray-900 dark:text-white group-hover:text-primary transition-colors"
@@ -15,3 +16,64 @@
     </li>
   }
 </ul>
+
+<div class="card flex justify-center">
+  <p-dialog [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <ng-template #headless>
+      <div class="flex flex-col px-8 py-8 gap-6 rounded-2xl">
+        <div class="flex justify-between">
+          <h1>{{ taskStore.selectedTask()?.title }}</h1>
+          <app-task-actions (hideTaskDialog)="visible = false"></app-task-actions>
+        </div>
+
+        <span class="p-text-secondary block mb-8">{{ taskStore.selectedTask()?.description }}</span>
+
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+          <!-- Status (Column) -->
+          <div class="flex flex-col gap-2">
+            <label for="columnId" class="text-xs font-bold text-medium uppercase tracking-widest"
+              >Status</label
+            >
+            <div class="relative">
+              <select
+                id="columnId"
+                formControlName="columnId"
+                class="w-full appearance-none border border-light-line dark:border-dark-line rounded px-4 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-dark-card focus:outline-none focus:border-primary transition-colors cursor-pointer"
+              >
+                <option value="" disabled>Select column</option>
+                @for (column of columnStore.entities(); track column.id) {
+                  <option [value]="column.id">{{ column.title }}</option>
+                }
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                <svg
+                  class="w-4 h-4 text-medium"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+           <div class="flex justify-end gap-2">
+          <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+          <button
+            type="submit"
+            class="flex-1 bg-primary hover:bg-primary-light cursor-pointer text-white font-bold text-sm rounded-full py-3 transition-colors"
+          >
+            Save Changes
+          </button>
+        </div>
+        </form>
+       
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>
