@@ -31,6 +31,17 @@ export type Task = {
   updatedAt: Date
 };
 
+export type Subtask = {
+  id: number;
+  kanbanTaskId: number,
+  title: string,
+  description: string,
+  order: number,
+  done: boolean,
+  createdAt: Date,
+  updatedAt: Date
+};
+
 export type RegisterUserPayload = {
   username: string;
   email: string;
