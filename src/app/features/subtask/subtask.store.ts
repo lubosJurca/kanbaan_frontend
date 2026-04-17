@@ -1,13 +1,15 @@
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import {
   addEntities,
   addEntity,
+  removeAllEntities,
   removeEntity,
+  setAllEntities,
   updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
 import { Subtask } from '../../models/models';
-import { computed, inject } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { TaskStore } from '../task/task.store';
 import { firstValueFrom } from 'rxjs';
 import { SubtaskService } from './subtask.service';
@@ -29,7 +31,7 @@ export const SubtaskStore = signalStore(
         patchState(store, { isLoading: true });
         try {
           const subtasks = await firstValueFrom(subtaskService.getAllSubtasksByTaskId(taskId));
-          patchState(store, addEntities(subtasks));
+          patchState(store, setAllEntities(subtasks));
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse
@@ -54,6 +56,11 @@ export const SubtaskStore = signalStore(
             subtaskService.createSubtask(taskId, description, done),
           );
           patchState(store, addEntity(subtask));
+            messageService.add({
+            severity: 'success',
+            summary: 'Success!',
+            detail: `Subtask with description ${subtask.title} was created!`,
+          });
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse
@@ -146,4 +153,17 @@ export const SubtaskStore = signalStore(
       },
     }),
   ),
+  withHooks((store) => ({
+    onInit(){
+      effect(() => {
+        const taskId = store.currentTaskId();
+        if(taskId){
+          store.loadSubtasks(taskId);
+
+        }else {
+          patchState(store,removeAllEntities());
+        }
+      })
+    }
+  }))
 );

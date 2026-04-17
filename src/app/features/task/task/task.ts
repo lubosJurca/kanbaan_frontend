@@ -6,6 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { TaskActions } from '../../dashboard/components/task-actions/task-actions';
 import { ColumnStore } from '../../column/column.store';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SubtaskStore } from '../../subtask/subtask.store';
 
 @Component({
   selector: 'app-task',
@@ -16,11 +17,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 export class Task {
   columnId = input.required<number>();
   public columnStore = inject(ColumnStore);
+  public subtaskStore = inject(SubtaskStore);
+  public taskStore = inject(TaskStore);
   private formBuilder = inject(FormBuilder);
-  taskStore = inject(TaskStore);
   visible: boolean = false;
 
   taskForm = this.formBuilder.group({
+    subtasks: this.formBuilder.array([]),
     columnId: [null as number | null, Validators.required],
   });
 
@@ -43,6 +46,13 @@ onSubmit() {
     this.taskForm.patchValue({
     columnId: this.taskStore.selectedTask()?.columnId
   })
+
+  for(const subtask of this.subtaskStore.entities()){
+    this.taskForm.value.subtasks?.push(subtask)
+  }
+
+  console.log('Subtask: ', this.taskForm.value.subtasks);
+
     this.visible = true;
   }
 

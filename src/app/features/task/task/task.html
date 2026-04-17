@@ -29,6 +29,11 @@
         <span class="p-text-secondary block mb-8">{{ taskStore.selectedTask()?.description }}</span>
 
         <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+          <!-- Subtasks -->
+          <div>
+            
+          </div>
+
           <!-- Status (Column) -->
           <div class="flex flex-col gap-2">
             <label for="columnId" class="text-xs font-bold text-medium uppercase tracking-widest"
@@ -62,17 +67,16 @@
               </div>
             </div>
           </div>
-           <div class="flex justify-end gap-2">
-          <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-          <button
-            type="submit"
-            class="flex-1 bg-primary hover:bg-primary-light cursor-pointer text-white font-bold text-sm rounded-full py-3 transition-colors"
-          >
-            Save Changes
-          </button>
-        </div>
+          <div class="flex justify-end gap-2">
+            <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+            <button
+              type="submit"
+              class="flex-1 bg-primary hover:bg-primary-light cursor-pointer text-white font-bold text-sm rounded-full py-3 transition-colors"
+            >
+              Save Changes
+            </button>
+          </div>
         </form>
-       
       </div>
     </ng-template>
   </p-dialog>

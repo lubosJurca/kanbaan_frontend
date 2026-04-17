@@ -46,6 +46,8 @@ export class BoardComponent implements OnInit {
         this.columns.push(this.formBuilder.group({ title: ['Todo'] }));
         this.columns.push(this.formBuilder.group({ title: ['Doing'] }));
         this.visible = false;
+      } catch (error){
+        console.log("Error while creating board: ", error)
       } finally {
         this.submitting.set(false);
       }

@@ -70,6 +70,8 @@ export const TaskStore = signalStore(
             summary: 'Success!',
             detail: `Task ${task.title} was created!`,
           });
+
+          return task
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse
@@ -82,6 +84,8 @@ export const TaskStore = signalStore(
             summary: 'Creating task failed',
             detail: errorMessage,
           });
+
+          return null;
         } finally {
           patchState(store, { isLoading: false });
         }

@@ -20,6 +20,60 @@
   --font-sans: 'Plus Jakarta Sans', sans-serif;
 }
 
+/* Kanbaan Dialog */
+.kanbaan-dialog .p-dialog {
+  background: white !important;
+  border-radius: 0.5rem !important;
+  border: none !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+}
+
+.kanbaan-dialog .p-dialog-header {
+  background: white !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+  padding: 1.5rem 1.5rem 0 1.5rem !important;
+  border-bottom: none !important;
+}
+
+.kanbaan-dialog .p-dialog-header .p-dialog-title {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  color: #000112 !important;
+  line-height: 1.4 !important;
+}
+
+.kanbaan-dialog .p-dialog-header .p-dialog-header-icon {
+  color: #828FA3 !important;
+}
+
+.kanbaan-dialog .p-dialog-header .p-dialog-header-icon:hover {
+  color: #EA5555 !important;
+  background: transparent !important;
+}
+
+.kanbaan-dialog .p-dialog-content {
+  background: white !important;
+  border-radius: 0 0 0.5rem 0.5rem !important;
+  padding: 1.25rem 1.5rem 1.5rem 1.5rem !important;
+}
+
+/* Dark mode */
+.dark .kanbaan-dialog .p-dialog {
+  background: #2B2C37 !important;
+}
+
+.dark .kanbaan-dialog .p-dialog-header {
+  background: #2B2C37 !important;
+}
+
+.dark .kanbaan-dialog .p-dialog-header .p-dialog-title {
+  color: white !important;
+}
+
+.dark .kanbaan-dialog .p-dialog-content {
+  background: #2B2C37 !important;
+}
+
 /* Confirm Dialog - custom buttons */
 .confirm-accept-btn.p-button {
   background: var(--color-destructive) !important;
