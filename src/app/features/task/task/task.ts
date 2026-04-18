@@ -1,4 +1,5 @@
 import { Component, computed, inject, input, OnInit } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { TaskStore } from '../task.store';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
@@ -7,10 +8,11 @@ import { TaskActions } from '../../dashboard/components/task-actions/task-action
 import { ColumnStore } from '../../column/column.store';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubtaskStore } from '../../subtask/subtask.store';
+import { Subtask } from '../../../models/models';
 
 @Component({
   selector: 'app-task',
-  imports: [CdkDropList, CdkDrag, ButtonModule, DialogModule, TaskActions, ReactiveFormsModule],
+  imports: [CdkDropList, CdkDrag, ButtonModule, DialogModule, TaskActions, ReactiveFormsModule, NgClass],
   templateUrl: './task.html',
   host: { class: 'flex flex-col flex-1' },
 })
@@ -21,39 +23,55 @@ export class Task {
   public taskStore = inject(TaskStore);
   private formBuilder = inject(FormBuilder);
   visible: boolean = false;
+  localSubtasks: Subtask[] = [];
 
   taskForm = this.formBuilder.group({
     subtasks: this.formBuilder.array([]),
     columnId: [null as number | null, Validators.required],
   });
 
-onSubmit() {
-  if (this.taskForm.valid) {
-    if (this.columnId() !== this.taskForm.value.columnId) {
-      const task = this.taskStore.selectedTask();
-      this.taskStore.updateTask({
-        title: task!.title!,
-        description: task?.description,
-        columnId: this.taskForm.value.columnId!,
-      });
+  onSubmit() {
+    if (this.taskForm.valid) {
+      if (this.columnId() !== this.taskForm.value.columnId) {
+        const task = this.taskStore.selectedTask();
+        this.taskStore.updateTask({
+          title: task!.title!,
+          description: task?.description,
+          columnId: this.taskForm.value.columnId!,
+        });
+      }
+
+      for (const subtask of this.localSubtasks) {
+        const original = this.subtaskStore.entityMap()[subtask.id];
+
+        if (original && original.done != subtask.done) {
+          this.subtaskStore.updateSubtask(subtask);
+        }
+      }
     }
+    this.visible = false;
   }
-  this.visible = false;
-}
 
-  showDialog(taskId: number) {
+  toggleSubtask(index: number) {
+    this.localSubtasks[index] = {
+      ...this.localSubtasks[index],
+      done: !this.localSubtasks[index].done,
+    };
+  }
+
+  async showDialog(taskId: number) {
     this.taskStore.setSelectedTaskId(taskId);
-    this.taskForm.patchValue({
-    columnId: this.taskStore.selectedTask()?.columnId
-  })
+    this.visible = true;
 
-  for(const subtask of this.subtaskStore.entities()){
-    this.taskForm.value.subtasks?.push(subtask)
+    this.taskForm.patchValue({
+      columnId: this.taskStore.selectedTask()?.columnId,
+    });
+
+    this.localSubtasks = (await this.subtaskStore.loadSubtasks(taskId)) ?? [];
   }
 
-  console.log('Subtask: ', this.taskForm.value.subtasks);
-
-    this.visible = true;
+  get doneSubtasksCount() {
+    return this.localSubtasks.filter((s) => s.done).length;
   }
 
   columnTasks = computed(() =>

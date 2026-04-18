@@ -23,23 +23,22 @@ export type Column = {
 
 export type Task = {
   id: number;
-  columnId: number,
-  title: string,
-  description: string,
-  order: number,
-  createdAt: Date,
-  updatedAt: Date
+  columnId: number;
+  title: string;
+  description: string;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Subtask = {
   id: number;
-  kanbanTaskId: number,
-  title: string,
-  description: string,
-  order: number,
-  done: boolean,
-  createdAt: Date,
-  updatedAt: Date
+  kanbanTaskId: number;
+  description: string;
+  order: number;
+  done: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type RegisterUserPayload = {
@@ -61,11 +60,11 @@ export type AuthState = {
 };
 
 export type TaskPayload = {
-  title: string,
-  description: string
-}
+  title: string;
+  description: string;
+};
 export type UpdateTaskPayload = {
-  title: string,
-  description?: string,
-  columnId?: number
-}
+  title: string;
+  description?: string;
+  columnId?: number;
+};

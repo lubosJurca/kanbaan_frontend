@@ -1,4 +1,11 @@
-import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import {
   addEntities,
   addEntity,
@@ -32,6 +39,7 @@ export const SubtaskStore = signalStore(
         try {
           const subtasks = await firstValueFrom(subtaskService.getAllSubtasksByTaskId(taskId));
           patchState(store, setAllEntities(subtasks));
+          return subtasks;
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse
@@ -44,6 +52,7 @@ export const SubtaskStore = signalStore(
             summary: 'Loading subtasks failed',
             detail: errorMessage,
           });
+          return null;
         } finally {
           patchState(store, { isLoading: false });
         }
@@ -56,10 +65,10 @@ export const SubtaskStore = signalStore(
             subtaskService.createSubtask(taskId, description, done),
           );
           patchState(store, addEntity(subtask));
-            messageService.add({
+          messageService.add({
             severity: 'success',
             summary: 'Success!',
-            detail: `Subtask with description ${subtask.title} was created!`,
+            detail: `Subtask with description ${subtask.description} was created!`,
           });
         } catch (error) {
           const errorMessage =
@@ -83,6 +92,11 @@ export const SubtaskStore = signalStore(
         try {
           const updatedSubtask = await firstValueFrom(subtaskService.updateSubtask(subtask));
           patchState(store, updateEntity({ id: updatedSubtask.id, changes: updatedSubtask }));
+          messageService.add({
+            severity: 'success',
+            summary: 'Success!',
+            detail: `Subtask with description ${subtask.description} was created!`,
+          });
         } catch (error) {
           const errorMessage =
             error instanceof HttpErrorResponse
@@ -154,16 +168,15 @@ export const SubtaskStore = signalStore(
     }),
   ),
   withHooks((store) => ({
-    onInit(){
+    onInit() {
       effect(() => {
         const taskId = store.currentTaskId();
-        if(taskId){
+        if (taskId) {
           store.loadSubtasks(taskId);
-
-        }else {
-          patchState(store,removeAllEntities());
+        } else {
+          patchState(store, removeAllEntities());
         }
-      })
-    }
-  }))
+      });
+    },
+  })),
 );
